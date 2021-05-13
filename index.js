@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const appointmentService = require("./services/AppointmentService");
 
 app.use(express.static("public"));
 
@@ -21,5 +22,24 @@ res.send("oi");
 app.get("/Cadastro", (req, res) => { 
     res.render("create");
 })
+
+app.post("/create" , async (req, res) => {
+
+ var status = await appointmentService.Create(
+    req.body.name,
+    req.body.email,
+    req.body.description,
+    req.body.cpf,
+    req.body.date,
+    req.body.time
+    
+    )
+
+    if(status){
+        res.redirect("/");
+    }else{
+        res.send("Ocorreu uma falaha!");
+    }
+    });
 
 app.listen(8090, () => {});
